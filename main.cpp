@@ -1,4 +1,5 @@
 #include "Map/map.h"
+#include "Task/task.h"
 #include <iostream>
 
 int main() {
@@ -13,7 +14,8 @@ int main() {
     std::cout<<map.is_walkable(1, 1)<<' '<<map.is_walkable(11, 2)<<std::endl;
     std::vector<std::tuple<int, int>> v = map.get_pos();
     for(const auto x : v) {
-        std::cout<<std::get<0>(x)<<' '<<std::get<1>(x)<<std::endl;
+        struct Task task_1(std::get<0>(x), std::get<1>(x), Priority::LOW);
+        task_1.check_station();
     }
     return 0;
 }
