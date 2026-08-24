@@ -1,3 +1,6 @@
+#ifndef EXCEPT_H
+#define EXCEPT_H
+
 #include <stdexcept>
 #include <string>
 class Error : public std::runtime_error{
@@ -14,3 +17,5 @@ class File_error : public Error{
 public:
     File_error(const std::string& path) : Error("文件路径错误, 请检查: " + path) {};
 };
+
+#endif

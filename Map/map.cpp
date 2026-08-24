@@ -43,7 +43,7 @@ void Map::print_map() {
 }
 
 bool Map::is_walkable(int x, int y) {
-    if(x<0||x>rows_||y<0||y>cols_)
+    if(x<0||x>=rows_||y<0||y>=cols_)
         return false;
     if(grid_[x][y] == '#')
         return false;

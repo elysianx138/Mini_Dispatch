@@ -9,8 +9,8 @@
 
 class Map {
     std::vector<std::vector<char>> grid_;
-    int rows_;
-    int cols_;
+    int rows_;  // ÐÐ
+    int cols_;  // ÁÐ
 public:
     Map(int rows, int cols);
     void Load_map_from_file(const std::string& path);
