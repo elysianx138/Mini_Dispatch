@@ -1,15 +1,13 @@
 #include "map.h"
 #include "Utils/except.h"
-MAP::MAP(int rows, int cols) : rows_(rows), cols_(cols) {
+Map::Map(int rows, int cols) : rows_(rows), cols_(cols) {
     grid_.resize(rows);
     for(int i = 0; i < rows; i++) {
         grid_[i].resize(cols);
     }
 }
 
-MAP::~MAP(){}
-
-void MAP::Load_map_from_file(const std::string& path) {
+void Map::Load_map_from_file(const std::string& path) {
     std::ifstream in(path);
         if(!(in.is_open()))
             throw File_error(path);
@@ -35,13 +33,32 @@ void MAP::Load_map_from_file(const std::string& path) {
         }
 }
 
-void MAP::print_map() {
+void Map::print_map() {
     for(int i = 0; i < rows_; i++) {
         for(int j = 0; j < cols_; j++) {
             std::cout << grid_[i][j];
         }
         std::cout << std::endl;
     }
+}
+
+bool Map::is_walkable(int x, int y) {
+    if(x<0||x>rows_||y<0||y>cols_)
+        return false;
+    if(grid_[x][y] == '#')
+        return false;
+    return true;
+}
+
+std::vector<std::tuple<int, int>> Map::get_pos() {
+    std::vector<std::tuple<int, int>> pos;
+    for(int i = 0;i<rows_;i++){
+        for(int j = 0;j<cols_;j++){
+            if(grid_[i][j] == 'T')
+                pos.push_back(std::make_tuple(i, j));
+        }
+    }
+    return pos;
 }
 
 

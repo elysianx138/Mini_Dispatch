@@ -5,17 +5,18 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <tuple>
 
-
-class MAP {
+class Map {
     std::vector<std::vector<char>> grid_;
     int rows_;
     int cols_;
 public:
-    MAP(int rows, int cols);
-    ~MAP();
+    Map(int rows, int cols);
     void Load_map_from_file(const std::string& path);
     void print_map();
+    bool is_walkable(int x, int y);
+    std::vector<std::tuple<int, int>> get_pos();
 };
 
 #endif
