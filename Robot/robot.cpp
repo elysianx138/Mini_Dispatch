@@ -13,9 +13,11 @@ std::string State_to_string(State state) {
 }
 
 std::vector<std::tuple<int, int>> recursion(const std::vector<BfsNode>& Node, int k, std::vector<std::tuple<int, int>>& ans) {
-    if(Node[k].parent_ == -1)
+    if(Node[k].parent_ == -1) {
         std::reverse(ans.begin(), ans.end());
         return ans;
+    }
+        
     ans.push_back(std::make_tuple(Node[k].x_, Node[k].y_));
     return recursion(Node, Node[k].parent_, ans);
 }
