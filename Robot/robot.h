@@ -4,6 +4,7 @@
 #include <tuple>
 #include <vector>
 #include "Map/map.h"
+#include "Task/task.h"
 #include "Utils/point.h"
 enum class State {Idle, Moving, Working, Charging, RETURNING};
 
@@ -24,9 +25,12 @@ public:
     int y_pos() const;
     int get_id() const;
     int get_power() const;
-    void decide_path(int target_x, int target_y, Map& map);
+    void decide_path(Task assigned_task, Map& map);
     void get_msg() const;
+    State get_state() const;
     void moving();
+
+    void finished_task(Task& task);
 };
 
 #endif

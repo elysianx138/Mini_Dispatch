@@ -24,7 +24,9 @@ void Robot::get_msg() const {
     std::cout<<"机器人ID: "<<id_<<" 机器人坐标x: "<<x_<<" 机器人坐标y: "<<y_<<" 机器人电量: "<<power_<<" 机器人状态: "<<State_to_string(state_)<<std::endl;
 }
 
-void Robot::decide_path(int target_x, int target_y, Map& map) {
+void Robot::decide_path(Task assigned_task, Map& map) {
+    int target_x = assigned_task.x_;
+    int target_y = assigned_task.y_;
     std::vector<Point> ans = bfs(map, x_, y_, target_x, target_y);
     if(ans.empty())
         throw Path_error(target_x, target_y);
@@ -43,4 +45,14 @@ void Robot::moving() {
     power_ -= 10;
     path_.erase(path_.begin());
     state_ = State::Moving;
+}
+
+void Robot::finished_task(Task& task) {
+    int target_x = task.x_;
+    int target_y = task.y_;
+    bool target_done = task.done;
+    if(target_x == x_ && target_y == y_) {
+        target_done = true;
+        state_ = State::Idle;
+    }
 }

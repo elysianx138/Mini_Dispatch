@@ -14,7 +14,7 @@ int main() {
     
     map.print_map();
     std::cout<<map.is_walkable(1, 1)<<' '<<map.is_walkable(11, 2)<<std::endl;
-    std::vector<std::tuple<int, int>> v = map.get_pos();
+    std::vector<std::tuple<int, int>> v = map.get_task_pos();
     for(const auto x : v) {
         struct Task task_1(std::get<0>(x), std::get<1>(x), Priority::LOW);
         task_1.check_station();

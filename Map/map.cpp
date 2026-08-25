@@ -50,7 +50,7 @@ bool Map::is_walkable(int x, int y) {
     return true;
 }
 
-std::vector<std::tuple<int, int>> Map::get_pos() {
+std::vector<std::tuple<int, int>> Map::get_task_pos() {
     std::vector<std::tuple<int, int>> pos;
     for(int i = 0;i<rows_;i++){
         for(int j = 0;j<cols_;j++){

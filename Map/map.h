@@ -17,7 +17,7 @@ public:
     void print_map();
     int row() const { return rows_; }
     int col() const { return cols_; }
-    std::vector<std::tuple<int, int>> get_pos();
+    std::vector<std::tuple<int, int>> get_task_pos();
     bool is_walkable(int x, int y);
 };
 

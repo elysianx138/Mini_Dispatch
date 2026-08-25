@@ -18,6 +18,7 @@ struct Task{
     Priority type_;
     bool done;
 
+    Task();
     Task(int x, int y, const Priority& type);
     void check_station();    
 };
