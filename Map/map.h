@@ -16,6 +16,8 @@ public:
     void Load_map_from_file(const std::string& path);
     void print_map();
     bool is_walkable(int x, int y);
+    int row() const { return rows_; }
+    int col() const { return cols_; }
     std::vector<std::tuple<int, int>> get_pos();
 };
 
