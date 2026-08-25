@@ -1,7 +1,7 @@
 #ifndef BFS_H
 #define BFS_H
-#include "Robot/robot.h"
 #include "Map/map.h"
+#include "Utils/point.h"
 #include <vector>
 
 struct BfsNode {
@@ -10,6 +10,6 @@ struct BfsNode {
     int parent_;
 };
 
-std::vector<std::tuple<int, int>> recursion(const std::vector<BfsNode>& Node, int k, std::vector<std::tuple<int, int>>& ans);
-std::vector<std::tuple<int, int>> bfs(Map& map, int x, int y, int target_x, int target_y);
+std::vector<Point> recursion(const std::vector<BfsNode>& Node, int k, std::vector<Point>& ans);
+std::vector<Point> bfs(Map& map, int x, int y, int target_x, int target_y);
 #endif

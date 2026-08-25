@@ -18,4 +18,9 @@ public:
     File_error(const std::string& path) : Error("文件路径错误, 请检查: " + path) {};
 };
 
+class Path_error : public Error{
+public:
+    Path_error(int x, int y) : Error("路径不可到达: "  + std::to_string(x) + " " + std::to_string(y)) {};
+};
+
 #endif

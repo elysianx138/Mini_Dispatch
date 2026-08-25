@@ -1,22 +1,22 @@
 #include <algorithm>
 #include <queue>
 #include "bfs.h"
-std::vector<std::tuple<int, int>> recursion(const std::vector<BfsNode>& Node, int k, std::vector<std::tuple<int, int>>& ans) {
+std::vector<Point> recursion(const std::vector<BfsNode>& Node, int k, std::vector<Point>& ans) {
     if(Node[k].parent_ == -1) {
         std::reverse(ans.begin(), ans.end());
         return ans;
     }
         
-    ans.push_back(std::make_tuple(Node[k].x_, Node[k].y_));
+    ans.push_back(Point{Node[k].x_, Node[k].y_});
     return recursion(Node, Node[k].parent_, ans);
 }
-std::vector<std::tuple<int, int>> bfs(Map& map, int x, int y, int target_x, int target_y) {
+std::vector<Point> bfs(Map& map, int x, int y, int target_x, int target_y) {
     int dx[5] = {0, 0, 1, 0, -1};
     int dy[5] = {0, 1, 0, -1, 0};
 
     std::queue<std::tuple<int, int>> q;
     std::vector<BfsNode> Node;
-    std::vector<std::tuple<int, int>> ans;
+    std::vector<Point> ans;
     std::vector<std::vector<bool>> visited(map.row(), std::vector<bool>(map.col(), false));
     visited[x][y] = true;
     int k = -1;
