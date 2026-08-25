@@ -1,6 +1,7 @@
 #include "Map/map.h"
 #include "Task/task.h"
 #include "Robot/robot.h"
+#include "Utils/bfs.h"
 #include <iostream>
 
 int main() {
