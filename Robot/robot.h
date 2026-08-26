@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <vector>
+#include <memory>
 #include "Map/map.h"
 #include "Task/task.h"
 #include "Utils/point.h"
@@ -16,10 +17,25 @@ class Robot {
     int x_;
     int y_;
     int power_;
+    int loss_;
+    int power_threshold_;
     std::vector<Point> path_;
     State state_;
 
-    void state_machine();
+    Task* target_task;
+    Power target_power;
+
+    
+    void tell_power_threshold(Map& map);
+    void finished_task();
+    void turn_to_dead();
+    void charging_and_finished_power();
+
+    void decide_path(Map& map);
+    void moving();
+    Power decide_charge(Map& map);
+    void arrived_task_pos();
+    void arrived_power_pos();
 
 public:
     Robot(int id, int x, int y);
@@ -27,11 +43,11 @@ public:
     int y_pos() const;
     int get_id() const;
     int get_power() const;
-    void decide_path(Task assigned_task, Map& map);
+    void step(Map& map);
     State get_state() const;
-    void moving();
     void get_msg() const;
-    void finished_task(Task& task);
+    void receive_task(Task* task, Map& map);
+    
 };
 
 #endif
