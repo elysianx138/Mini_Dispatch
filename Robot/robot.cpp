@@ -14,7 +14,7 @@ std::string State_to_string(State state) {
     return "Unknown";
 }
 
-Robot::Robot(int id, int x, int y) : id_(id), x_(x), y_(y), power_(100), state_(State::Idle), loss_(5), power_threshold_(40), target_task(nullptr) {}
+Robot::Robot(int id, int x, int y) : id_(id), x_(x), y_(y), power_(100), state_(State::Idle), loss_(5), power_threshold_(60), target_task(nullptr) {}
 
 int Robot::x_pos() const { return x_; }
 int Robot::y_pos() const { return y_; }
@@ -133,6 +133,8 @@ Power Robot::decide_charge(Map& map) {
 
 
 void Robot::arrived_task_pos() {
+    if(target_task == nullptr)
+        return;
     int target_x = target_task->x_;
     int target_y = target_task->y_;
     if(target_x == x_ && target_y == y_) {
@@ -151,21 +153,16 @@ void Robot::arrived_power_pos() {
 }
 
 void Robot::finished_task() {
-    int target_task_required_power = target_task->required_power_;
-    while(target_task_required_power>=0) {
-        target_task_required_power -= 10;
-    }
-    if(target_task_required_power<=0) {
-        target_task_required_power = 0;
+    target_task->required_power_ -= 10;
+    if(target_task->required_power_ <=0) {
+        target_task->required_power_  = 0;
         target_task->done = true;
         state_ = State::Idle;
     }
 }
 
 void Robot::charging_and_finished_power() {
-     while(power_<=100) {
-        power_+=10;
-    }
+    power_+=10;
     if(power_>=100) {
         power_ = 100;
         state_ = State::Idle;

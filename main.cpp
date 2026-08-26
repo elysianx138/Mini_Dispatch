@@ -7,6 +7,7 @@
 #include <windows.h>
 
 int main() {
+    srand(time(0));
     Map map;
     try{
         Map::Load_map_from_file("Map/map.txt", map);
@@ -21,7 +22,7 @@ int main() {
     Scheduler scheduler(task_list, robot_list);
 
 
-    for(int i = 1;i<=10;i++){
+    for(int i = 1;i<=20;i++){
         scheduler.step(map);
         scheduler.print_all_robot_msg();
         scheduler.print_all_task_msg();
