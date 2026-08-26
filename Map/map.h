@@ -22,6 +22,7 @@ public:
     std::vector<Task> get_task_list();
     std::vector<Power> get_power_list();
     bool is_walkable(int x, int y);
+    char get_cell(int i, int j) const ;
 };
 
 #endif

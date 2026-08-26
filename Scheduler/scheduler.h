@@ -13,6 +13,7 @@ public:
     Task* assign_task();
     void print_all_robot_msg() const;
     void print_all_task_msg() const;
+    void print_map_with_robot(const Map& map) const ;
 };
 
 

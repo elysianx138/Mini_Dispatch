@@ -62,3 +62,21 @@ void Scheduler::print_all_task_msg() const {
         std::cout<<"任务坐标: "<<task.x_<<": "<<task.y_<<" "<<"任务优先级: "<<Priority_to_string(task.type_)<<" "<<"任务是否完成: "<<task.done<<" "<<"任务是否分配: "<<task.assigned<<std::endl;
     }
 }
+
+void Scheduler::print_map_with_robot(const Map& map) const {
+    for(int i = 0;i<map.row();i++){
+        for(int j = 0;j<map.col();j++){
+            bool is_robot_ = false;
+            for(const auto& robot : robot_list_) {
+                if(robot->x_pos() == i && robot->y_pos() == j) {
+                    std::cout<<robot->get_id();
+                    is_robot_ = true;
+                }
+            }
+            if(!is_robot_) {
+                std::cout<<map.get_cell(i, j);
+            }
+        }
+        std::cout<<std::endl;
+    }
+}

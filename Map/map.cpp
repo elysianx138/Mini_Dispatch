@@ -66,6 +66,8 @@ std::vector<Power> Map::get_power_list() {
     return pos;
 }
 
-
+char Map::get_cell(int i, int j) const {
+    return grid_[i][j];
+}
 
 

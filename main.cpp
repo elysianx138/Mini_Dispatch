@@ -24,6 +24,7 @@ int main() {
 
     for(int i = 1;i<=20;i++){
         scheduler.step(map);
+        scheduler.print_map_with_robot(map);
         scheduler.print_all_robot_msg();
         scheduler.print_all_task_msg();
         Sleep(1000);
