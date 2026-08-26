@@ -11,7 +11,7 @@ std::string Priority_to_string(Priority priority) {
     }
     return "UNKNOWN";
 }
-Task::Task(int x, int y) : x_(x), y_(y), done(false), assigned(false) {
+Task::Task(int x, int y) : x_(x), y_(y), done(false), assigned(false),required_power_(30) {
     int r = rand()%3;
     type_ = Priority(r); 
 };
