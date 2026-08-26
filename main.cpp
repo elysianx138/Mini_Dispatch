@@ -2,6 +2,7 @@
 #include "Task/task.h"
 #include "Robot/robot.h"
 #include "Utils/bfs.h"
+#include "Utils/logger.h"
 #include "Scheduler/scheduler.h"
 #include <iostream>
 #include <windows.h>
@@ -24,10 +25,13 @@ int main() {
         scheduler = std::make_unique<Scheduler>(task_list, robot_list, map);
     } catch (std::exception& e){
         std::cout<<e.what()<<std::endl;
+        return 1;
     }
-    
 
-    for(int i = 1;i<=20;i++){
+    log_event(0, "INFO", "模拟开始: " + std::to_string(robot_list.size()) +
+              " 个机器人, " + std::to_string(task_list.size()) + " 个任务");
+
+    while (!scheduler->all_done() && !scheduler->all_dead()) {
         try{
             scheduler->step(map);
         } catch (std::exception& e){
@@ -38,10 +42,7 @@ int main() {
         scheduler->print_all_task_msg();
         Sleep(1000);
     }
-    
-    
+
+    scheduler->print_statistics();
     return 0;
 }
-
-// while循环
-// 系统状态显示
