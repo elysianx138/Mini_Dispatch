@@ -23,4 +23,9 @@ public:
     Path_error(int x, int y) : Error("路径不可到达: "  + std::to_string(x) + " " + std::to_string(y)) {};
 };
 
+class Robot_error : public Error{
+public:
+    Robot_error(const std::string& msg, int id_) : Error("机器人错误" + std::to_string(id_) + ": " + msg) {};
+};
+
 #endif

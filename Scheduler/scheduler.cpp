@@ -1,10 +1,17 @@
 #include "scheduler.h"
 #include "Map/map.h"
+#include "Utils/except.h"
 #include <vector>
 #include <tuple>
 #include <algorithm>
 
-Scheduler::Scheduler(const std::vector<Task>& task_list, std::vector<std::unique_ptr<Robot>>& robot_list) : task_list_(task_list), robot_list_(std::move(robot_list)) {}
+Scheduler::Scheduler(const std::vector<Task>& task_list, std::vector<std::unique_ptr<Robot>>& robot_list, const Map& map) : task_list_(task_list), robot_list_(std::move(robot_list)) {
+    for(auto& robot : robot_list_) {
+        if(robot->x_pos()<0||robot->y_pos()<0||robot->x_pos()>=map.row()||robot->y_pos()>=map.col()) {
+            throw Robot_error("机器人初始位置不合法", robot->get_id());
+        }
+    }
+}
 
 Task* Scheduler::assign_task() {
     Task* task = nullptr;

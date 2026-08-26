@@ -8,7 +8,7 @@ class Scheduler {
     std::vector<std::unique_ptr<Robot>> robot_list_;
     int time_;
 public:
-    Scheduler(const std::vector<Task>& task_list, std::vector<std::unique_ptr<Robot>>& robot_list);
+    Scheduler(const std::vector<Task>& task_list, std::vector<std::unique_ptr<Robot>>& robot_list, const Map& map);
     void step(Map& map);
     Task* assign_task();
     void print_all_robot_msg() const;
