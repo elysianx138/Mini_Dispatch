@@ -2,9 +2,11 @@
 #define TASK_H
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 
 
-enum class Priority {LOW, MEDIUM, HIGH};
+enum class Priority {LOW, MEDIUM, HIGH, PriorityCount};
 
 std::string Priority_to_string(Priority priority);
 
@@ -17,8 +19,10 @@ struct Task{
     int y_;
     Priority type_;
     bool done;
+    bool assigned;
 
     Task();
+    Task(int x, int y);
     Task(int x, int y, const Priority& type);
     void check_station();    
 };

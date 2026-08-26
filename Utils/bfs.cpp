@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <queue>
+#include <tuple>
 #include "bfs.h"
 std::vector<Point> recursion(const std::vector<BfsNode>& Node, int k, std::vector<Point>& ans) {
     if(Node[k].parent_ == -1) {

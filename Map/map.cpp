@@ -50,12 +50,12 @@ bool Map::is_walkable(int x, int y) {
     return true;
 }
 
-std::vector<std::tuple<int, int>> Map::get_task_pos() {
-    std::vector<std::tuple<int, int>> pos;
+std::vector<Task> Map::get_task_list() {
+    std::vector<Task> pos;
     for(int i = 0;i<rows_;i++){
         for(int j = 0;j<cols_;j++){
             if(grid_[i][j] == 'T')
-                pos.push_back(std::make_tuple(i, j));
+                pos.push_back(Task(i, j));
         }
     }
     return pos;

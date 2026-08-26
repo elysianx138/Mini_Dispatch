@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <tuple>
+#include "Task/task.h"
 
 class Map {
     std::vector<std::vector<char>> grid_;
@@ -17,7 +17,7 @@ public:
     void print_map();
     int row() const { return rows_; }
     int col() const { return cols_; }
-    std::vector<std::tuple<int, int>> get_task_pos();
+    std::vector<Task> get_task_list();
     bool is_walkable(int x, int y);
 };
 

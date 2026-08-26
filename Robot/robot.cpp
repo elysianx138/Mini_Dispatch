@@ -8,7 +8,8 @@ std::string State_to_string(State state) {
         case State::Moving: return "Moving";
         case State::Working: return "Working";
         case State::Charging: return "Charging";
-        case State::RETURNING: return "returning";
+        case State::RETURNING: return "Returning";
+        case State::DEAD: return "Dead";
     }
     return "Unknown";
 }
@@ -19,11 +20,10 @@ int Robot::x_pos() const { return x_; }
 int Robot::y_pos() const { return y_; }
 int Robot::get_id() const { return id_;}
 int Robot::get_power() const { return power_; }
-
+State Robot::get_state() const { return state_; }
 void Robot::get_msg() const {
     std::cout<<"机器人ID: "<<id_<<" 机器人坐标x: "<<x_<<" 机器人坐标y: "<<y_<<" 机器人电量: "<<power_<<" 机器人状态: "<<State_to_string(state_)<<std::endl;
 }
-
 void Robot::decide_path(Task assigned_task, Map& map) {
     int target_x = assigned_task.x_;
     int target_y = assigned_task.y_;
@@ -47,12 +47,12 @@ void Robot::moving() {
     state_ = State::Moving;
 }
 
+
 void Robot::finished_task(Task& task) {
     int target_x = task.x_;
     int target_y = task.y_;
-    bool target_done = task.done;
     if(target_x == x_ && target_y == y_) {
-        target_done = true;
+        task.done = true;
         state_ = State::Idle;
     }
 }
