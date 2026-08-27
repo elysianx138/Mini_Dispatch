@@ -255,7 +255,7 @@ MiniDispatch/
 在项目根目录执行(需已安装 `g++`):
 
 ```bash
-g++ -o main.exe main.cpp \
+g++ -I main.exe main.cpp \
     Map/map.cpp \
     Task/Task.cpp \
     Robot/robot.cpp \
