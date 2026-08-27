@@ -5,7 +5,10 @@
 #include "Utils/logger.h"
 #include "Scheduler/scheduler.h"
 #include <iostream>
+#include <thread>
+
 #include <windows.h>
+
 
 int main() {
     srand(time(0));
@@ -20,6 +23,10 @@ int main() {
     robot_list.push_back(std::make_unique<Robot>(1, 1, 1));
     robot_list.push_back(std::make_unique<Robot>(2, 1, 10));
     std::vector<Task> task_list = map.get_task_list();
+
+    log_event(0, "INFO", "æ¨¡æ‹Ÿå¼€å§‹: " + std::to_string(robot_list.size()) +
+              " ä¸ªæœºå™¨äºº, " + std::to_string(task_list.size()) + " ä¸ªä»»åŠ¡");
+
     std::unique_ptr<Scheduler> scheduler = nullptr;
     try{
         scheduler = std::make_unique<Scheduler>(task_list, robot_list, map);
@@ -27,9 +34,6 @@ int main() {
         std::cout<<e.what()<<std::endl;
         return 1;
     }
-
-    log_event(0, "INFO", "Ä£Äâ¿ªÊ¼: " + std::to_string(robot_list.size()) +
-              " ¸ö»úÆ÷ÈË, " + std::to_string(task_list.size()) + " ¸öÈÎÎñ");
 
     while (!scheduler->all_done() && !scheduler->all_dead()) {
         try{

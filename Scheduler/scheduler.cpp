@@ -10,7 +10,7 @@
 Scheduler::Scheduler(const std::vector<Task>& task_list, std::vector<std::unique_ptr<Robot>>& robot_list, const Map& map) : task_list_(task_list), robot_list_(std::move(robot_list)) {
     for(auto& robot : robot_list_) {
         if(robot->x_pos()<0||robot->y_pos()<0||robot->x_pos()>=map.row()||robot->y_pos()>=map.col()) {
-            throw Robot_error("»úÆ÷ÈË³õÊ¼Î»ÖÃ²»ºÏ·¨", robot->get_id());
+            throw Robot_error("æœºå™¨äººåˆå§‹ä½ç½®ä¸åˆæ³•", robot->get_id());
         }
     }
 }
@@ -54,7 +54,7 @@ void Scheduler::step(Map& map) {
             Task* task = assign_task();
             if(task) {
                 robot->receive_task(task, map);
-                log_event(time_, "INFO", "»úÆ÷ÈË" + std::to_string(robot->get_id()) + " ÁìÈ¡ÈÎÎñ (" + std::to_string(task->x_) + "," + std::to_string(task->y_) +") [" + Priority_to_string(task->type_) + "]");
+                log_event(time_, "INFO", "æœºå™¨äºº" + std::to_string(robot->get_id()) + " é¢†å–ä»»åŠ¡ (" + std::to_string(task->x_) + "," + std::to_string(task->y_) +") [" + Priority_to_string(task->type_) + "]");
             }
         }
     }
@@ -66,15 +66,15 @@ void Scheduler::step(Map& map) {
     for (size_t i = 0; i < robot_list_.size(); i++) {
         State now = robot_list_[i]->get_state();
         if (now != prev[i]) {
-            log_event(time_, "INFO", "»úÆ÷ÈË" + std::to_string(robot_list_[i]->get_id()) + ": " + State_to_string(prev[i]) + " ¡ú " + State_to_string(now));
+            log_event(time_, "INFO", "æœºå™¨äºº" + std::to_string(robot_list_[i]->get_id()) + ": " + State_to_string(prev[i]) + " â†’ " + State_to_string(now));
             if (now == State::Charging) charge_count_++;
             if (now == State::DEAD) dead_count_++;
         }
     }
 }
-// 1.ËÑË÷ËùÓĞ¿ÕÏĞ»úÆ÷ÈË
-// 2. ·ÖÅäÈÎÎñ, ĞĞ¶¯
-// ÈÕÖ¾´òÓ¡
+// 1.æœç´¢æ‰€æœ‰ç©ºé—²æœºå™¨äºº
+// 2. åˆ†é…ä»»åŠ¡, è¡ŒåŠ¨
+// æ—¥å¿—æ‰“å°
 
 bool Scheduler::all_done() const {
     for (const auto& task : task_list_)
@@ -94,11 +94,11 @@ void Scheduler::print_statistics() const {
     int done = 0;
     for (const auto& task : task_list_)
         if (task.done) done++;
-    std::cout << "\n===== Ä£ÄâÍ³¼Æ±¨¸æ =====\n";
-    std::cout << "×ÜºÄÊ±: " << time_ << " tick\n";
-    std::cout << "ÈÎÎñÍê³ÉÂÊ: " << done << "/" << task_list_.size()<< " (" << (task_list_.empty() ? 0 : done * 100 / task_list_.size()) << "%)\n";
-    std::cout << "³äµç´ÎÊı: " << charge_count_ << "\n";
-    std::cout << "»úÆ÷ÈËËÀÍöÊı: " << dead_count_ << "\n";
+    std::cout << "\n===== æ¨¡æ‹Ÿç»Ÿè®¡æŠ¥å‘Š =====\n";
+    std::cout << "æ€»è€—æ—¶: " << time_ << " tick\n";
+    std::cout << "ä»»åŠ¡å®Œæˆç‡: " << done << "/" << task_list_.size()<< " (" << (task_list_.empty() ? 0 : done * 100 / task_list_.size()) << "%)\n";
+    std::cout << "å……ç”µæ¬¡æ•°: " << charge_count_ << "\n";
+    std::cout << "æœºå™¨äººæ­»äº¡æ•°: " << dead_count_ << "\n";
     std::cout << "========================\n";
 }
 
@@ -111,7 +111,7 @@ void Scheduler::print_all_robot_msg() const {
 
 void Scheduler::print_all_task_msg() const {
     for(const auto& task : task_list_) {
-        std::cout<<"ÈÎÎñ×ø±ê: "<<task.x_<<": "<<task.y_<<" "<<"ÈÎÎñÓÅÏÈ¼¶: "<<Priority_to_string(task.type_)<<" "<<"ÈÎÎñÊÇ·ñÍê³É: "<<task.done<<" "<<"ÈÎÎñÊÇ·ñ·ÖÅä: "<<task.assigned<<std::endl;
+        std::cout<<"ä»»åŠ¡åæ ‡: "<<task.x_<<": "<<task.y_<<" "<<"ä»»åŠ¡ä¼˜å…ˆçº§: "<<Priority_to_string(task.type_)<<" "<<"ä»»åŠ¡æ˜¯å¦å®Œæˆ: "<<task.done<<" "<<"ä»»åŠ¡æ˜¯å¦åˆ†é…: "<<task.assigned<<std::endl;
     }
 }
 

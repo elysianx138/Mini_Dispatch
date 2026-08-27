@@ -11,8 +11,6 @@ enum class Priority {LOW, MEDIUM, HIGH, PriorityCount};
 std::string Priority_to_string(Priority priority);
 
 
-// 后续(x_ ,y_)
-// x作为行, y作为列
 
 struct Task{
     int x_;

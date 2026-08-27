@@ -10,8 +10,8 @@
 
 class Map {
     std::vector<std::vector<char>> grid_;
-    int rows_;  // ÐÐ
-    int cols_;  // ÁÐ
+    int rows_;  // è¡Œ
+    int cols_;  // åˆ—
 public:
     Map (int rows, int cols);
     Map ();

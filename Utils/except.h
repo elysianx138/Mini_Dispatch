@@ -10,22 +10,22 @@ public:
 
 class Size_error : public Error{
 public:
-    Size_error(const std::string& size) : Error("µØÍ¼³ß´ç´íÎó, Çë¼ì²é: " + size) {};
+    Size_error(const std::string& size) : Error("åœ°å›¾å°ºå¯¸é”™è¯¯, è¯·æ£€æŸ¥: " + size) {};
 };
 
 class File_error : public Error{
 public:
-    File_error(const std::string& path) : Error("ÎÄ¼şÂ·¾¶´íÎó, Çë¼ì²é: " + path) {};
+    File_error(const std::string& path) : Error("æ–‡ä»¶è·¯å¾„é”™è¯¯, è¯·æ£€æŸ¥: " + path) {};
 };
 
 class Path_error : public Error{
 public:
-    Path_error(int x, int y) : Error("Â·¾¶²»¿Éµ½´ï: "  + std::to_string(x) + " " + std::to_string(y)) {};
+    Path_error(int x, int y) : Error("è·¯å¾„ä¸å¯åˆ°è¾¾: "  + std::to_string(x) + " " + std::to_string(y)) {};
 };
 
 class Robot_error : public Error{
 public:
-    Robot_error(const std::string& msg, int id_) : Error("»úÆ÷ÈË´íÎó" + std::to_string(id_) + ": " + msg) {};
+    Robot_error(const std::string& msg, int id_) : Error("æœºå™¨äººé”™è¯¯" + std::to_string(id_) + ": " + msg) {};
 };
 
 #endif
