@@ -6,9 +6,9 @@
 #include "Scheduler/scheduler.h"
 #include <iostream>
 #include <thread>
-
+#ifdef _WIN32
 #include <windows.h>
-
+#endif
 
 int main() {
     srand(time(0));
@@ -44,7 +44,12 @@ int main() {
         scheduler->print_map_with_robot(map);
         scheduler->print_all_robot_msg();
         scheduler->print_all_task_msg();
+#ifdef _WIN32
         Sleep(1000);
+#else
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+#endif
+        
     }
 
     scheduler->print_statistics();

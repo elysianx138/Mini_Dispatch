@@ -32,7 +32,6 @@ void Robot::receive_task(Task* task, Map& map) {
 void Robot::step(Map& map) {
     switch(state_) {
         case State::DEAD:
-        // 机器人处于待机死亡状态
             break;
         case State::Idle:
         // 等待任务, 可领取任务
