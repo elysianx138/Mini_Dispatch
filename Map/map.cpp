@@ -9,10 +9,13 @@ void Map::Load_map_from_file(const std::string& path, Map& map) {
         
         std::string line;
         int temp_rows = 0;
+        int temp_cols = 0;
         while(std::getline(in, line)){
+            if(temp_rows == 0)
+                temp_cols = line.size();
             temp_rows++;
         }
-        int temp_cols = line.size();
+        
             in.clear();
             in.seekg(0);
 
