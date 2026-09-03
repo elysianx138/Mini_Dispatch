@@ -24,8 +24,8 @@ int main() {
     robot_list.push_back(std::make_unique<Robot>(2, 1, 10));
     std::vector<Task> task_list = map.get_task_list();
 
-    log_event(0, "INFO", "æ¨¡æ‹Ÿå¼€å§‹: " + std::to_string(robot_list.size()) +
-              " ä¸ªæœºå™¨äºº, " + std::to_string(task_list.size()) + " ä¸ªä»»åŠ¡");
+    log_event(0, "INFO", "Ä£Äâ¿ªÊ¼: " + std::to_string(robot_list.size()) +
+              " ¸ö»úÆ÷ÈË, " + std::to_string(task_list.size()) + " ¸öÈÎÎñ");
 
     std::unique_ptr<Scheduler> scheduler = nullptr;
     try{
@@ -53,5 +53,8 @@ int main() {
     }
 
     scheduler->print_statistics();
+    #ifdef _WIN32
+        system("pause");   
+    #endif
     return 0;
 }

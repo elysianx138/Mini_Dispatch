@@ -1,6 +1,6 @@
 #include "robot.h"
 #include "Map/map.h"
-#include "Utils/bfs.h"
+#include "Utils/Astar.h"
 #include "Utils/except.h"
 std::string State_to_string(State state) {
     switch(state) {
@@ -22,7 +22,7 @@ int Robot::get_id() const { return id_;}
 int Robot::get_power() const { return power_; }
 State Robot::get_state() const { return state_; }
 void Robot::get_msg() const {
-    std::cout<<"æœºå™¨äººID: "<<id_<<" æœºå™¨äººåæ ‡x: "<<x_<<" æœºå™¨äººåæ ‡y: "<<y_<<" æœºå™¨äººç”µé‡: "<<power_<<" æœºå™¨äººçŠ¶æ€: "<<State_to_string(state_)<<std::endl;
+    std::cout<<"»úÆ÷ÈËID: "<<id_<<" »úÆ÷ÈË×ø±êx: "<<x_<<" »úÆ÷ÈË×ø±êy: "<<y_<<" »úÆ÷ÈËµçÁ¿: "<<power_<<" »úÆ÷ÈË×´Ì¬: "<<State_to_string(state_)<<std::endl;
 }
 void Robot::receive_task(Task* task, Map& map) {
     target_task = task;
@@ -34,18 +34,18 @@ void Robot::step(Map& map) {
         case State::DEAD:
             break;
         case State::Idle:
-        // ç­‰å¾…ä»»åŠ¡, å¯é¢†å–ä»»åŠ¡
+        // µÈ´ýÈÎÎñ, ¿ÉÁìÈ¡ÈÎÎñ
             break;
         case State::Charging:
-        // æœºå™¨äººæ­£åœ¨å……ç”µ: æ˜¯å¦å……æ»¡?
+        // »úÆ÷ÈËÕýÔÚ³äµç: ÊÇ·ñ³äÂú?
             charging_and_finished_power();
             break;
         case State::Working:
             finished_task();
             break;
-        // æœºå™¨äººæ­£åœ¨å·¥ä½œ: æ˜¯å¦å®Œæˆä»»åŠ¡?
+        // »úÆ÷ÈËÕýÔÚ¹¤×÷: ÊÇ·ñÍê³ÉÈÎÎñ?
         case State::Moving:
-        // æœºå™¨äººç§»åŠ¨: æ˜¯å¦åˆ°è¾¾ç›®çš„åœ°?/æ˜¯å¦ç”µé‡ä½ŽäºŽé˜ˆå€¼?/æ²¡ç”µ?/ç»§ç»­ç§»åŠ¨
+        // »úÆ÷ÈËÒÆ¶¯: ÊÇ·ñµ½´ïÄ¿µÄµØ?/ÊÇ·ñµçÁ¿µÍÓÚãÐÖµ?/Ã»µç?/¼ÌÐøÒÆ¶¯
             moving();
             tell_power_threshold(map);
             arrived_task_pos();
@@ -57,21 +57,21 @@ void Robot::step(Map& map) {
             arrived_power_pos();
             turn_to_dead();
             break;
-        // è¿”å›žå……ç”µ: æ˜¯å¦åˆ°è¾¾ç›®çš„åœ°?/æ˜¯å¦æ²¡ç”µ? åŒæ—¶æ”¾å¼ƒä»»åŠ¡;//ç»§ç»­ç§»åŠ¨
+        // ·µ»Ø³äµç: ÊÇ·ñµ½´ïÄ¿µÄµØ?/ÊÇ·ñÃ»µç? Í¬Ê±·ÅÆúÈÎÎñ;//¼ÌÐøÒÆ¶¯
     }
 }
 
-//  é¢†å–ä»»åŠ¡ -> æ€è€ƒè·¯å¾„ 
-// ä»€ä¹ˆæ—¶å€™åˆ¤æ–­çŠ¶æ€æœº? -> å·¥ä½œ?å¦‚æžœå·¥ä½œè¯æ˜Žç”µé‡å·²ç»æ»¡è¶³ä¸”ä¸éœ€è¦è§„åˆ’ / æ­»äº¡? æ­»äº¡å°±æ˜¯å¾…æœº,æ²¡å¿…è¦ / å……ç”µ? æ²¡å¿…è¦/ å¾…æœº? å¦‚æžœè¦ä¹ˆå·¥ä½œå®Œæˆ/è¦ä¹ˆæ— æ³•å®Œæˆ,å¯ä»¥é¢†å–ä»»åŠ¡è¿›è¡ŒçŠ¶æ€æœº
-//  çŠ¶æ€:å®Œæˆä»»åŠ¡? / åˆ¤æ–­æ˜¯å¦å®Œæˆä»»åŠ¡/ /æ˜¯å¦éœ€è¦å……ç”µ / æ˜¯å¦æ²¡ç”µ /  
-//  å®Œæˆå·¥ä½œ->è‡ªåŠ¨å……ç”µ(æ²¡ç”µ? ä¸èƒ½åŠ¨,å¾…æœº) -> æ²¡å……ç”µçš„ ->BFSå¯»è·¯å¾„ -> æœ€ä¼˜è§£(æ— æœºå™¨äººå……ç”µ)
-// ä¸èƒ½å®Œæˆä»»åŠ¡->å‘ä¸Šæ”¾å¼ƒä»»åŠ¡(è°ƒåº¦å™¨å†åˆ†é…?) -> å†æ¬¡è¢«åˆ†é…å‘¢?
-//  éœ€è¦å……ç”µ, ä¼˜å…ˆçº§æœ€é«˜, å……æ»¡ç”µ -> å®Œæˆä»»åŠ¡
+//  ÁìÈ¡ÈÎÎñ -> Ë¼¿¼Â·¾¶ 
+// Ê²Ã´Ê±ºòÅÐ¶Ï×´Ì¬»ú? -> ¹¤×÷?Èç¹û¹¤×÷Ö¤Ã÷µçÁ¿ÒÑ¾­Âú×ãÇÒ²»ÐèÒª¹æ»® / ËÀÍö? ËÀÍö¾ÍÊÇ´ý»ú,Ã»±ØÒª / ³äµç? Ã»±ØÒª/ ´ý»ú? Èç¹ûÒªÃ´¹¤×÷Íê³É/ÒªÃ´ÎÞ·¨Íê³É,¿ÉÒÔÁìÈ¡ÈÎÎñ½øÐÐ×´Ì¬»ú
+//  ×´Ì¬:Íê³ÉÈÎÎñ? / ÅÐ¶ÏÊÇ·ñÍê³ÉÈÎÎñ/ /ÊÇ·ñÐèÒª³äµç / ÊÇ·ñÃ»µç /  
+//  Íê³É¹¤×÷->×Ô¶¯³äµç(Ã»µç? ²»ÄÜ¶¯,´ý»ú) -> Ã»³äµçµÄ ->BFSÑ°Â·¾¶ -> ×îÓÅ½â(ÎÞ»úÆ÷ÈË³äµç)
+// ²»ÄÜÍê³ÉÈÎÎñ->ÏòÉÏ·ÅÆúÈÎÎñ(µ÷¶ÈÆ÷ÔÙ·ÖÅä?) -> ÔÙ´Î±»·ÖÅäÄØ?
+//  ÐèÒª³äµç, ÓÅÏÈ¼¶×î¸ß, ³äÂúµç -> Íê³ÉÈÎÎñ
 
 void Robot::decide_path(Map& map) {
     int target_x = target_task->x_;
     int target_y = target_task->y_;
-    std::vector<Point> ans = bfs(map, x_, y_, target_x, target_y);
+    std::vector<Point> ans = a_star(map, x_, y_, target_x, target_y);
     if(ans.empty())
         throw Path_error(target_x, target_y);
     path_ = ans;
@@ -117,7 +117,7 @@ Power Robot::decide_charge(Map& map) {
         int target_x = power.x_;
         int target_y = power.y_;
 
-        std::vector<Point> ans = bfs(map, x_, y_, target_x, target_y);
+        std::vector<Point> ans = a_star(map, x_, y_, target_x, target_y);
         if(ans.empty())
             throw Path_error(target_x, target_y);
         if(min>ans.size() || min == -1){

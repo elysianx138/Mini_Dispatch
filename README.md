@@ -240,9 +240,11 @@ MiniDispatch/
 ```cpp
 for(int i = 1;i<=4;i++) {
     ...
-    if(cur.g_ != cost_so_far[next_x][next_y]) continue;
-    // 优化点 : 当长路径被替换时, frontier队列可能存在长路径, 后续可能会继续弹出剩余路径, 造成不必要的浪费
+    
     if(!map.is_walkable(next_x, next_y)) continue;
+
+    if(cur.g_ != cost_so_far[cur.x_][cur.y_]) continue;
+    // 优化点 : 当长路径被替换时, frontier队列可能存在长路径, 后续可能会继续弹出剩余路径, 造成不必要的浪费
 
     if(cost_so_far[next_x][next_y] == -1 || next_g_ < cost_so_far[next_x][next_y]) {
 

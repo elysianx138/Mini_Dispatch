@@ -30,10 +30,15 @@ std::vector<Point> a_star(Map& map, int x, int y, int target_x, int target_y) {
     AStarNode start(x, y);
     start.f_ = start.g_ + manhattan(x, y, target_x, target_y);
     frontier.push(start);
+    Node.push_back(start);
+    cost_so_far[x][y] = 0;   // 起点的最优 g = 0（否则绕回起点会被当成新格子反复入队）
 
     while(!(frontier.empty())) {
         AStarNode cur = frontier.top();
         frontier.pop();
+
+        if(cur.g_ != cost_so_far[cur.x_][cur.y_]) continue;
+            // 优化点 // 当长路径被替换时, frontier队列可能存在长路径, 后续可能会继续弹出剩余路径, 造成不必要的浪费
 
         if(cur.x_ == target_x && cur.y_ == target_y) {
             return recursion(Node,cur.idx_, ans);
@@ -44,9 +49,6 @@ std::vector<Point> a_star(Map& map, int x, int y, int target_x, int target_y) {
             int next_y = cur.y_ + dy[i];
             int next_g_ = cur.g_ + 1; // +1 : 计算出发点到下一点的代价 :: 后续抽象为函数
 
-            if(cur.g_ != cost_so_far[next_x][next_y]) continue;
-            // 优化点 // 当长路径被替换时, frontier队列可能存在长路径, 后续可能会继续弹出剩余路径, 造成不必要的浪费
-
             if(!map.is_walkable(next_x, next_y)) continue;
 
             if(cost_so_far[next_x][next_y] == -1 || next_g_ < cost_so_far[next_x][next_y]) {
@@ -55,7 +57,7 @@ std::vector<Point> a_star(Map& map, int x, int y, int target_x, int target_y) {
                 
                 int next_come_from_ = cur.idx_;
                 int next_f_ = next_g_ + manhattan(next_x, next_y, target_x, target_y);
-                int next_idx_ = cur.idx_++;
+                int next_idx_ = Node.size();
 
                 AStarNode next(next_x, next_y, next_g_, next_come_from_, next_idx_);
                 next.f_ = next_f_;
