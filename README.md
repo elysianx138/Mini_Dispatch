@@ -12,6 +12,7 @@
 - [项目结构](#项目结构)
 - [模块详解](#模块详解)
 - [架构设计](#架构设计)
+- [算法设计](#算法设计)
 - [运行流程](#运行流程)
 - [构建与运行](#构建与运行)
 - [地图文件说明](#地图文件说明)
@@ -231,6 +232,29 @@ MiniDispatch/
 > - 动态任务插入与重规划;
 > - 引入 A* / 时间窗等更优算法; √
 > - 多线程/多进程化改造。
+
+---
+
+# 算法设计
+## A*算法关键设计
+```cpp
+for(int i = 1;i<=4;i++) {
+    ...
+    if(cur.g_ != cost_so_far[next_x][next_y]) continue;
+    // 优化点 : 当长路径被替换时, frontier队列可能存在长路径, 后续可能会继续弹出剩余路径, 造成不必要的浪费
+    if(!map.is_walkable(next_x, next_y)) continue;
+
+    if(cost_so_far[next_x][next_y] == -1 || next_g_ < cost_so_far[next_x][next_y]) {
+
+    cost_so_far[next_x][next_y] = next_g_;
+    ...
+    } else {
+        continue;
+    }
+}
+```
+**优化点为什么这样设计?**
+*在Astar算法中,`cur.g_`总是大于等于cost_so_far[next_x][next_y]的; 但是如果cur.g_更新后, cost_so_far[next_x][next_y]等于cur.g_;但是当之前的长路径被弹出后, 依然会进行后续的逻辑, 会造成浪费.*
 
 ---
 
